@@ -60,6 +60,8 @@ app.get('/profile', isLoggedIn, function(req, res) {
 // include auth controller
 app.use('/auth', require('./controllers/auth'));
 
+app.use('/', require('./controllers/test'));
+
 // initialize App on Port
 app.listen(process.env.PORT || 3000, function() {
     console.log(`Listening to the smooth sweet sounds of port ${process.env.PORT} in the morning ☕️.`);
