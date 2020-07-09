@@ -1,6 +1,6 @@
 // Required NPM libraries
 require('dotenv').config();
-const Express = require('express');
+const express = require('express');
 const ejsLayouts = require("express-ejs-layouts");
 const helmet = require('helmet');
 const session = require("express-session");
@@ -9,12 +9,13 @@ const passport = require('./config/ppConfig');
 const db = require('./models');
 const isLoggedIn = require('./middleware/isLoggedIn');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const axios = require('axios');
 
 
 // app setup
-const app = Express();
-app.use(Express.urlencoded({ extended: false }));
-app.use(Express.static(__dirname + "/public"));
+const app = express();
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(__dirname + "/public"));
 app.set('view engine','ejs');
 app.use(ejsLayouts);
 app.use(require('morgan')('dev'));
@@ -49,7 +50,13 @@ app.use(function(req, res, next) {
 
 // ROUTES
 app.get('/', function(req, res) {
+    const rescueApi = "https://api.petfinder.com/v2/animals?status=adoptable"
+    axios.get(rescueApi).then( function(apiResponse) {
+        const animals = apiResponse.animals;
+    res.send(animals);
+    });
     // check to see if user logged in
+    console.log(env)
     res.render('index');
 })
 
